@@ -1,0 +1,57 @@
+<!doctype HTML>
+<html>
+<script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+<!-- include ar.js for A-Frame -->
+<script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <!-- Correcting zooming issue -->
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <!-- Library untuk VR membangun 3D -->
+    <script src="./js/aframe/aframe.min.js"></script>
+    <!-- Library untuk AR yang melakukan pengenalan marker dan menyematkan kamera-->
+    <script src="./js/arjs/aframe-ar.js"></script>
+    <title>WebAR: Marker Move Object</title>
+    <script>
+        // https://aframe.io/docs/1.0.0/introduction/writing-a-component.html
+         AFRAME.registerComponent("listener", {
+    init: function() {
+      this.target = document.querySelector('#target');
+      this.prevPosition = null;
+    },
+   tick: function() {
+     if (this.el.object3D.visible) {
+       this.target.setAttribute('visible', 'true')
+       if(this.prevPosition) {
+         this.target.object3D.position.lerp(this.prevPosition, 0.2)
+       } else {
+         this.target.setAttribute('position', this.el.getAttribute('position'))
+       }
+       this.prevPosition = this.el.object3D.position
+      }
+   }
+ })
+    </script>
+</head>
+
+<body style="margin : 0px; overflow: hidden;">
+    <a-scene embedded vr-mode-ui="enabled: false" arjs="debugUIEnabled: false;">
+
+      <a-assets>
+        <img id="tshirt" width="1024" height="1024" crossorigin="anonymous" scale="" rotation="0 -90 0" src="assets/pin-clipart-com-shirt-pocket-clipart-804684.png">
+      </a-assets>
+
+        <!-- handle hiro marker -->
+        <a-marker preset="hiro" listener>
+            <!-- <a-sphere color="red" material="opacity: 0.5; color: blue;" radius="0.5" ></a-sphere> -->
+        </a-marker>
+        
+        <!-- <a-box move color="red" material="opacity: 1;" src="assets/tshirt-black.png" ></a-box> -->
+        <a-image id="target" scale="9 9 9" src="https://cdn.glitch.com/1f3b68cd-b897-4e49-bcd8-72894c36acbe%2FPinClipart.com_torch-clip-art_760505.png?v=1600246472577"></a-image>
+        <a-sphere  material="opacity: 0.5; color: cyan;" radius="0.5"></a-sphere>
+                
+        <!-- add a simple camera -->
+        <a-entity camera></a-entity>
+    </a-scene>
+   </body>
+</html>
